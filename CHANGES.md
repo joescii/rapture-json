@@ -27,3 +27,4 @@ This document describes the changes included in each release of Rapture JSON.
 ## Version 1.0.6
  - Removed spurious deprecation warning when using macros
  - Allow automatic conversion on extraction to `Json` type
+ - Workaround Scala issue SI-8947 in Scala 2.11.4
