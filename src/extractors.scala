@@ -46,7 +46,7 @@ trait Extractors {
       JsonBuffer.construct(VCell(jsonSerializer.serialize(x)), Vector())
     })
 
-  case class JsonCastExtractor[T](ast: JsonAst)
+  case class JsonCastExtractor[T](ast: JsonAst, dataType: DataTypes.DataType)
 
   implicit val stringExtractor: JsonExtractor[String] =
     BasicExtractor(x => x.$ast.getString(x.$root.value))
