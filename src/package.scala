@@ -1,6 +1,6 @@
 /**********************************************************************************************\
 * Rapture JSON Library                                                                         *
-* Version 1.0.6                                                                                *
+* Version 1.0.7                                                                                *
 *                                                                                              *
 * The primary distribution site is                                                             *
 *                                                                                              *
@@ -50,9 +50,15 @@ object `package` extends Serializers with Extractors with LowPriorityPackage {
       def construct(value: JsonDataType[_, _ <: JsonAst], ast2: DataAst): T =
         ast2 match {
           case ast2: JsonAst =>
-            if(ast == ast2) value.$normalize.asInstanceOf[T]
-            else jsonSerializer.serialize(Json.construct(VCell(value.$normalize),
-                Vector())(ast2)).asInstanceOf[T]
+            val norm = value.$normalize
+            try {
+              if(ast == ast2) norm.asInstanceOf[T]
+              else jsonSerializer.serialize(Json.construct(VCell(norm),
+                  Vector())(ast2)).asInstanceOf[T]
+            } catch { case e: ClassCastException =>
+              throw TypeMismatchException(ast.getType(norm),
+                  implicitly[JsonCastExtractor[T]].dataType, Vector())
+            }
           case _ => ???
         }
     }
