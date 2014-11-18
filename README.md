@@ -36,6 +36,7 @@ where `[backend]` is one of the following JSON backends:
  - Jawn (`jawn`)
  - JSON4S (`json4s`)
  - Lift JSON (`lift` -- Scala 2.10 only)
+ - Play JSON (`play`)
  - Spray (`spray`)
 
 You can also use Rapture JSON with the JSON parser built into Scala 2.10 with
@@ -111,6 +112,7 @@ The following backends are available:
  - Jawn (`jawn`)
  - JSON4S (`json4s`)
  - Lift (`lift` -- Scala 2.10 only)
+ - Play (`play`)
  - Scala standard library JSON (`scalaJson`)
  - Spray (`spray`)
 
