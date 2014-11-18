@@ -136,7 +136,10 @@ object JsonVerifier {
       }
       consume('[')
       takeWhitespace()
-      takeElement()
+      cur match {
+        case ']' => consume(']')
+        case _ => takeElement()
+      }
     }
 
     def takeString(): Unit = {

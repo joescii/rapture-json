@@ -83,4 +83,5 @@ class JsonBufferStrings[R <: JsonBufferAst](sc: StringContext) {
         JsonBufferAst]): JsonBuffer =
       macro JsonBufferDataMacros.contextMacro
   }
+  val jsonBuffer = new JsonBufferContext()
 }
