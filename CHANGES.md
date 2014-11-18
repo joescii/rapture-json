@@ -32,4 +32,4 @@ This document describes the changes included in each release of Rapture JSON.
 ## Version 1.0.7
  - Support for addition of `Option[T]` values to maps
  - Extraction into `Try`s
-
+ - Compile-time checking of Json literals
