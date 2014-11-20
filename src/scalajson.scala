@@ -27,8 +27,8 @@ import scala.util.parsing.json.JSON
 package jsonBackends {
   package scalaJson {
     object `package` {
-      implicit val scalaJsonAst = ScalaJsonAst
-      implicit val scalaJsonBufferParser = ScalaJsonBufferParser
+      implicit val implicitJsonAst = ScalaJsonAst
+      implicit val implicitJsonStringParser = ScalaJsonBufferParser
     }
   }
 }
