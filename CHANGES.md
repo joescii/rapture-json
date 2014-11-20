@@ -36,4 +36,4 @@ This document describes the changes included in each release of Rapture JSON.
 
 ## Version 1.0.8 (not yet released)
  - Renamed implicit imports from different backends, so later imports shadow earlier ones, rather than being ambiguous
-
+ - Fixed issue with successful compilation of unextractable case class parameter values
