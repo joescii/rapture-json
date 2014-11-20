@@ -33,3 +33,7 @@ This document describes the changes included in each release of Rapture JSON.
  - Support for addition of `Option[T]` values to maps
  - Extraction into `Try`s
  - Compile-time checking of Json literals
+
+## Version 1.0.8 (not yet released)
+ - Renamed implicit imports from different backends, so later imports shadow earlier ones, rather than being ambiguous
+
