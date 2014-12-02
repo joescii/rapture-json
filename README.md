@@ -14,6 +14,7 @@ in Scala. Rapture JSON is part of the [Rapture](http://rapture.io/) project.
  - Simple, efficient conversion between different backends
  - Support for both immutable and mutable JSON
  - Flexible choice of error handling strategies using [modes](https://github.com/propensive/rapture-core)
+ - Can be easily extended using composable user-defined extractors and serializers
 
 ## Availability
 
@@ -486,7 +487,10 @@ will likely result in better performance.
 
 ## Converting JSON
 
-Depending on how a JSON value is created, the same Scala type is used, regardless of the JSON backend that was used to create it.
+All JSON is represented by the same Scala type, `Json`, regardless of what type
+of value it contains, and which backend was used to create it.
+
+FIXME: Complete this
 
 ## Outputting JSON
 
@@ -512,3 +516,7 @@ For example,
 import formatters.compact
 val out = Json.format(json)
 ```
+
+## Defining custom extractors and serializers
+
+FIXME: Complete this

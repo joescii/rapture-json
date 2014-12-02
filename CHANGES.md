@@ -38,6 +38,9 @@ This document describes the changes included in each release of Rapture JSON.
  - Renamed implicit imports from different backends, so later imports shadow earlier ones, rather than being ambiguous
  - Fixed issue with successful compilation of unextractable case class parameter values
 
-## Version 1.0.9 (not yet released)
+## Version 1.1.0 (not yet released)
  - Fixed return type of `parse` method
  - Better debugging for case class extractor generation failures
+ - Added convenience methods for composing serializers
+ - Upgrade to Rapture Core 1.1.0
+ - Provided a `|+|` method for combining extraction exceptions

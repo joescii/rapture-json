@@ -70,6 +70,9 @@ object JsonBuffer extends JsonDataCompanion[JsonBuffer, JsonBufferAst] {
   
   def construct(any: VCell, path: Vector[Either[Int, String]])(implicit ast:
       JsonBufferAst): JsonBuffer = new JsonBuffer(any, path)
+  
+  def extractor[T](implicit ext: Extractor[T, JsonBuffer]) = ext
+  def serializer[T](implicit ser: Serializer[T, JsonBuffer]) = ser
 }
 
 /** Companion object to the `Json` type, providing factory and extractor methods, and a JSON
@@ -80,6 +83,7 @@ object Json extends JsonDataCompanion[Json, JsonAst] {
       JsonAst): Json = new Json(any, path)
 
   def extractor[T](implicit ext: Extractor[T, Json]) = ext
+  def serializer[T](implicit ser: Serializer[T, Json]) = ser
 }
 
 /** Represents some parsed JSON. */
@@ -97,7 +101,7 @@ class Json(val $root: VCell, val $path: Vector[Either[Int, String]] = Vector())(
     }
   
   override def toString =
-    try Json.format(this)(formatters.humanReadable($ast)) catch {
+    try Json.format(this)(formatters.compact()($ast)) catch {
       case e: Exception => "undefined"
     }
 }
@@ -119,7 +123,7 @@ class JsonBuffer(val $root: VCell, val $path: Vector[Either[Int, String]] = Vect
     }
   
   override def toString =
-    try JsonBuffer.format(this)(formatters.humanReadable($ast)) catch {
+    try JsonBuffer.format(this)(formatters.compact()($ast)) catch {
       case e: Exception => "undefined"
     }
 }
