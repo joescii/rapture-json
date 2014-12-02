@@ -44,3 +44,4 @@ This document describes the changes included in each release of Rapture JSON.
  - Added convenience methods for composing serializers
  - Upgrade to Rapture Core 1.1.0
  - Provided a `|+|` method for combining extraction exceptions
+ - toString produces "compact" output now. Use import formatters.humanReadable._ and Json.format(json) for the old-style output
