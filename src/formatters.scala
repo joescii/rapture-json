@@ -30,12 +30,17 @@ import language.experimental.macros
 import language.higherKinds
 
 object formatters extends LowPriorityFormatters {
-  implicit def compact[Ast <: JsonAst](implicit ast: Ast):
-      Formatter[Ast] { type Out = String } =
-    new Formatter[Ast] {
-      type Out = String
-      def format(json: Any): String = general(json, 0, ast, "", "")
-    }
+  object compact {
+    def apply[Ast <: JsonAst]()(implicit ast: Ast): Formatter[Ast] { type Out = String } =
+      jsonFormatterImplicit[Ast]
+
+    implicit def jsonFormatterImplicit[Ast <: JsonAst](implicit ast: Ast):
+        Formatter[Ast] { type Out = String } =
+      new Formatter[Ast] {
+        type Out = String
+        def format(json: Any): String = general(json, 0, ast, "", "")  
+      }
+  }
 }
 
 class LowPriorityFormatters {
@@ -69,13 +74,18 @@ class LowPriorityFormatters {
         else "undefined"
     }
   }
-  
-  implicit def humanReadable[Ast <: JsonAst](implicit ast: Ast):
-      Formatter[Ast] { type Out = String } =
-    new Formatter[Ast] {
-      type Out = String
-      def format(json: Any): String = general(json, 0, ast, " ", "\n")  
-    }
+ 
+  object humanReadable {
+    def apply[Ast <: JsonAst]()(implicit ast: Ast): Formatter[Ast] { type Out = String } =
+      jsonFormatterImplicit[Ast]
+
+    implicit def jsonFormatterImplicit[Ast <: JsonAst](implicit ast: Ast):
+        Formatter[Ast] { type Out = String } =
+      new Formatter[Ast] {
+        type Out = String
+        def format(json: Any): String = general(json, 0, ast, " ", "\n")  
+      }
+  }
 
 }
 
