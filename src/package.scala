@@ -47,7 +47,7 @@ object `package` extends Serializers with Extractors with LowPriorityPackage {
   implicit def jsonCastExtractor[T: JsonCastExtractor](implicit ast: JsonAst):
       Extractor[T, JsonDataType[_, _ <: JsonAst]] =
     new Extractor[T, JsonDataType[_, _ <: JsonAst]] {
-      def construct(value: JsonDataType[_, _ <: JsonAst], ast2: DataAst): T =
+      def construct(value: JsonDataType[_, _ <: JsonAst], fail: Exception, ast2: DataAst): T =
         ast2 match {
           case ast2: JsonAst =>
             val norm = value.$normalize

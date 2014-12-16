@@ -45,3 +45,4 @@ This document describes the changes included in each release of Rapture JSON.
  - Upgrade to Rapture Core 1.1.0
  - Provided a `|+|` method for combining extraction exceptions
  - toString produces "compact" output now. Use import formatters.humanReadable._ and Json.format(json) for the old-style output
+ - Fixed #23. Extraction of `Option`s now works again

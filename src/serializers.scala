@@ -31,7 +31,7 @@ import language.higherKinds
 
 trait Serializers {
 
-  type JsonSerializer[T] = Serializer[T, JsonDataType[_, _ <: JsonAst]]
+  type JsonSerializer[T] = Serializer[T, Json]
 
   case class BasicJsonSerializer[T](serialization: T => Any) extends Serializer[T,
       JsonDataType[_, _ <: JsonAst]] { def serialize(t: T): Any = serialization(t) }
@@ -66,9 +66,16 @@ trait Serializers {
   implicit def byteSerializer(implicit ast: JsonAst): JsonSerializer[Byte] =
     BasicJsonSerializer(ast fromDouble _.toDouble)
 
+  implicit def nilSerializer(implicit ast: JsonAst): JsonSerializer[Nil.type] =
+    BasicJsonSerializer(v => ast fromArray Nil)
+
   implicit def traversableSerializer[Type: JsonSerializer, Coll[T] <: Traversable[T]]
       (implicit ast: JsonAst): JsonSerializer[Coll[Type]] =
     BasicJsonSerializer(ast fromArray _.map(?[JsonSerializer[Type]].serialize).to[List])
+
+  implicit def optionSerializer[Type: JsonSerializer]
+      (implicit ast: JsonAst): JsonSerializer[Option[Type]] =
+    BasicJsonSerializer(_ map ?[JsonSerializer[Type]].serialize getOrElse ast.nullValue)
 
   implicit def mapSerializer[Type, Ast <: JsonAst, JsonType <: JsonDataType[JsonType, _ <: Ast]]
       (implicit ast: Ast, ser: Serializer[Type, JsonType]): Serializer[Map[String, Type],
