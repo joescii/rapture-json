@@ -26,23 +26,7 @@ import rapture.data._
 import language.higherKinds
 import language.experimental.macros
 
-trait VeryLowPriorityPackage {
-  implicit def jsonExtractorMacro[T <: Product]: Extractor[T, Json] =
-    macro JsonMacros.jsonExtractorMacro[T]
-  
-  implicit def jsonBufferExtractorMacro[T <: Product]: Extractor[T, JsonBuffer] =
-    macro JsonMacros.jsonBufferExtractorMacro[T]
-  
-  implicit def jsonSerializerMacro[T <: Product](implicit ast: JsonAst): Serializer[T, Json] =
-    macro JsonMacros.jsonSerializerMacro[T]
-  
-  implicit def jsonBufferSerializerMacro[T <: Product](implicit ast: JsonBufferAst):
-      Serializer[T, JsonBuffer] = macro JsonMacros.jsonBufferSerializerMacro[T]
-}
-
-trait LowPriorityPackage extends VeryLowPriorityPackage
-
-object `package` extends Serializers with Extractors with LowPriorityPackage {
+object `package` extends internal.package_1 {
 
   implicit def jsonCastExtractor[T: JsonCastExtractor](implicit ast: JsonAst):
       Extractor[T, JsonDataType[_, _ <: JsonAst]] =
@@ -53,7 +37,7 @@ object `package` extends Serializers with Extractors with LowPriorityPackage {
             val norm = value.$normalize
             try {
               if(ast == ast2) norm.asInstanceOf[T]
-              else jsonSerializer.serialize(Json.construct(VCell(norm),
+              else JsonDataType.jsonSerializer.serialize(Json.construct(VCell(norm),
                   Vector())(ast2)).asInstanceOf[T]
             } catch { case e: ClassCastException =>
               throw TypeMismatchException(ast.getType(norm),
@@ -74,3 +58,20 @@ object `package` extends Serializers with Extractors with LowPriorityPackage {
       JsonBufferAst]) = new JsonBufferStrings(sc)
 }
 
+package internal {
+  trait package_2 {
+    implicit def jsonExtractorMacro[T <: Product]: Extractor[T, Json] =
+      macro JsonMacros.jsonExtractorMacro[T]
+    
+    implicit def jsonBufferExtractorMacro[T <: Product]: Extractor[T, JsonBuffer] =
+      macro JsonMacros.jsonBufferExtractorMacro[T]
+    
+    implicit def jsonSerializerMacro[T <: Product](implicit ast: JsonAst): Serializer[T, Json] =
+      macro JsonMacros.jsonSerializerMacro[T]
+    
+    implicit def jsonBufferSerializerMacro[T <: Product](implicit ast: JsonBufferAst):
+        Serializer[T, JsonBuffer] = macro JsonMacros.jsonBufferSerializerMacro[T]
+  }
+
+  trait package_1 extends package_2
+}

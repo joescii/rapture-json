@@ -63,6 +63,8 @@ trait JsonDataCompanion[+Type <: JsonDataType[Type, AstType],
   }
 }
 
+object JsonDataType extends Extractors with Serializers
+
 trait JsonDataType[+T <: JsonDataType[T, AstType], AstType <: JsonAst]
     extends DataType[T, AstType]
 
@@ -70,9 +72,6 @@ object JsonBuffer extends JsonDataCompanion[JsonBuffer, JsonBufferAst] {
   
   def construct(any: VCell, path: Vector[Either[Int, String]])(implicit ast:
       JsonBufferAst): JsonBuffer = new JsonBuffer(any, path)
-  
-  def extractor[T](implicit ext: Extractor[T, JsonBuffer]) = ext
-  def serializer[T](implicit ser: Serializer[T, JsonBuffer]) = ser
 }
 
 /** Companion object to the `Json` type, providing factory and extractor methods, and a JSON
