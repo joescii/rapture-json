@@ -32,33 +32,45 @@ import language.higherKinds
 
 case class JsonCastExtractor[T](ast: JsonAst, dataType: DataTypes.DataType)
 
-trait Extractors extends internal.Extractors_1 {
-
-  implicit def jsonExtractor(implicit ast: JsonAst): Extractor[Json, Json] =
-    BasicExtractor({ x =>
-      Json.construct(VCell(JsonDataType.jsonSerializer.serialize(x)), Vector())
-    })
-
-  implicit val stringExtractor: Extractor[String, Json] =
-    BasicExtractor(x => x.$ast.getString(x.$root.value))
-
-  implicit val doubleExtractor: Extractor[Double, Json] =
-    BasicExtractor(x => x.$ast.getDouble(x.$root.value))
-
-  implicit val intExtractor: Extractor[Int, Json] =
-    BasicExtractor(x => x.$ast.getDouble(x.$root.value).toInt)
-
-  implicit val booleanExtractor: Extractor[Boolean, Json] =
-    BasicExtractor(x => x.$ast.getBoolean(x.$root.value))
-  
-  implicit val bigDecimalExtractor: Extractor[BigDecimal, Json] =
-    BasicExtractor(x => x.$ast.getBigDecimal(x.$root.value))
-  
-  implicit val bigIntExtractor: Extractor[BigInt, Json] =
-    BasicExtractor(x => x.$ast.getBigDecimal(x.$root.value).toBigInt)
-}
-
 package internal {
+  trait Extractors extends Extractors_1 {
+
+    implicit def jsonExtractor(implicit ast: JsonAst): Extractor[Json, Json] =
+      new Extractor[Json, Json] {
+        def construct(any: Json, fail: Exception, dataAst: DataAst) =
+          Json.construct(VCell(JsonDataType.jsonSerializer.serialize(any)), Vector())
+      }
+
+    implicit val stringExtractor: Extractor[String, Json] =
+      new Extractor[String, Json] {
+        def construct(any: Json, fail: Exception, ast: DataAst) =
+          any.$ast.getString(any.$root.value)
+      }
+
+    implicit val doubleExtractor: Extractor[Double, Json] =
+      new Extractor[Double, Json] {
+        def construct(any: Json, fail: Exception, ast: DataAst) =
+          any.$ast.getDouble(any.$root.value)
+      }
+
+    implicit val intExtractor: Extractor[Int, Json] =
+      doubleExtractor.map(_.toInt)
+
+    implicit val booleanExtractor: Extractor[Boolean, Json] =
+      new Extractor[Boolean, Json] {
+        def construct(any: Json, fail: Exception, ast: DataAst) =
+          any.$ast.getBoolean(any.$root.value)
+      }
+    
+    implicit val bigDecimalExtractor: Extractor[BigDecimal, Json] =
+      new Extractor[BigDecimal, Json] {
+        def construct(any: Json, fail: Exception, ast: DataAst) =
+          any.$ast.getBigDecimal(any.$root.value)
+      }
+    
+    implicit val bigIntExtractor: Extractor[BigInt, Json] =
+      bigDecimalExtractor.map(_.toBigInt)
+  }
 
   trait Extractors_1 {
     implicit def jsonBufferExtractor[T](implicit jsonAst: JsonAst, ext: Extractor[T, Json]): Extractor[T, JsonBuffer] =

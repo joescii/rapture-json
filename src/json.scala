@@ -63,7 +63,7 @@ trait JsonDataCompanion[+Type <: JsonDataType[Type, AstType],
   }
 }
 
-object JsonDataType extends Extractors with Serializers
+object JsonDataType extends internal.Extractors with internal.Serializers
 
 trait JsonDataType[+T <: JsonDataType[T, AstType], AstType <: JsonAst]
     extends DataType[T, AstType]
