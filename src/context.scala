@@ -31,13 +31,13 @@ object JsonDataMacros extends DataContextMacros[Json, JsonAst] {
   def companion(c: Context): c.Expr[DataCompanion[Json, JsonAst]] = c.universe.reify(Json)
 
   def parseSource(s: List[String]) = try {
-    JsonVerifier.verify(s)
+    JsonValidator.validate(s)
     None
   } catch {
-    case JsonVerifier.VerifierException(strNo, pos, expected, found) =>
+    case JsonValidator.ValidationException(strNo, pos, expected, found) =>
       val f = if(found == '\0') "end of input" else s"'$found'"
       Some((strNo, pos, s"Failed to parse Json literal: Expected $expected, but found $f"))
-    case JsonVerifier.DuplicateKeyException(strNo, pos, key) =>
+    case JsonValidator.DuplicateKeyException(strNo, pos, key) =>
       Some((strNo, pos, s"""Duplicate key found in Json literal: "$key""""))
   }
   
@@ -53,10 +53,10 @@ object JsonBufferDataMacros extends DataContextMacros[JsonBuffer, JsonBufferAst]
     c.universe.reify(JsonBuffer)
 
   def parseSource(s: List[String]) = try {
-    JsonVerifier.verify(s)
+    JsonValidator.validate(s)
     None
   } catch {
-    case JsonVerifier.VerifierException(strNo, pos, expected, found) =>
+    case JsonValidator.ValidationException(strNo, pos, expected, found) =>
       val f = if(found == '\0') "end of input" else s"'$found'"
       Some((strNo, pos,
           s"Failed to parse JsonBuffer literal: Expected $expected, but found $f."))

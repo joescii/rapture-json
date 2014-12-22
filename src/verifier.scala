@@ -22,21 +22,21 @@ package rapture.json
 
 import rapture.data._
 
-object JsonVerifier {
+object JsonValidator {
 
-  case class VerifierException(strNo: Int, pos: Int, expected: String, found: Char)
+  case class ValidationException(strNo: Int, pos: Int, expected: String, found: Char)
       extends Exception
   
   case class DuplicateKeyException(strNo: Int, pos: Int, key: String) extends Exception
 
-  def verify(parts: List[String]) = {
+  def validate(parts: List[String]) = {
     var i = 0
     var n = 0
     def s = parts(n)
     def cur = if(i >= s.length) '\0' else s(i)
 
-    def fail(expected: String) = throw VerifierException(n, i, expected, cur)
-    def failPosition(expected: String) = throw VerifierException(n, i, expected, cur)
+    def fail(expected: String) = throw ValidationException(n, i, expected, cur)
+    def failPosition(expected: String) = throw ValidationException(n, i, expected, cur)
     def duplicateKey(start: Int, key: String) = throw DuplicateKeyException(n, start, key)
     
     def takeWhitespace(): Unit = while(cur.isWhitespace) next()

@@ -29,19 +29,21 @@ import scala.annotation._
 import language.experimental.macros
 import language.higherKinds
 
-object JsonMacros {
-  def jsonExtractorMacro[T: c.WeakTypeTag](c: Context): c.Expr[Extractor[T, Json]] =
-    Macros.extractorMacro[T, Json](c)
-  
-  def jsonBufferExtractorMacro[T: c.WeakTypeTag](c: Context): c.Expr[Extractor[T, JsonBuffer]] =
-    Macros.extractorMacro[T, JsonBuffer](c)
-  
-  def jsonSerializerMacro[T: c.WeakTypeTag](c: Context)(ast: c.Expr[JsonAst]):
-      c.Expr[Serializer[T, Json]] =
-    Macros.serializerMacro[T, Json](c)(ast)
-  
-  def jsonBufferSerializerMacro[T: c.WeakTypeTag](c: Context)(ast: c.Expr[JsonBufferAst]):
-      c.Expr[Serializer[T, JsonBuffer]] =
-    Macros.serializerMacro[T, JsonBuffer](c)(ast)
+package internal {
+  object JsonMacros {
+    def jsonExtractorMacro[T: c.WeakTypeTag](c: Context): c.Expr[Extractor[T, Json]] =
+      Macros.extractorMacro[T, Json](c)
+    
+    def jsonBufferExtractorMacro[T: c.WeakTypeTag](c: Context):
+        c.Expr[Extractor[T, JsonBuffer]] =
+      Macros.extractorMacro[T, JsonBuffer](c)
+    
+    def jsonSerializerMacro[T: c.WeakTypeTag](c: Context)(ast: c.Expr[JsonAst]):
+        c.Expr[Serializer[T, Json]] =
+      Macros.serializerMacro[T, Json](c)(ast)
+    
+    def jsonBufferSerializerMacro[T: c.WeakTypeTag](c: Context)(ast: c.Expr[JsonBufferAst]):
+        c.Expr[Serializer[T, JsonBuffer]] =
+      Macros.serializerMacro[T, JsonBuffer](c)(ast)
+  }
 }
-
