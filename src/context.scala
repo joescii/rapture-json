@@ -47,25 +47,27 @@ object JsonDataMacros extends DataContextMacros[Json, JsonAst] {
 
 }
 
-object JsonBufferDataMacros extends DataContextMacros[JsonBuffer, JsonBufferAst] {
-  
-  def companion(c: Context): c.Expr[DataCompanion[JsonBuffer, JsonBufferAst]] =
-    c.universe.reify(JsonBuffer)
+package internal {
 
-  def parseSource(s: List[String]) = try {
-    JsonValidator.validate(s)
-    None
-  } catch {
-    case JsonValidator.ValidationException(strNo, pos, expected, found) =>
-      val f = if(found == '\0') "end of input" else s"'$found'"
-      Some((strNo, pos,
-          s"Failed to parse JsonBuffer literal: Expected $expected, but found $f."))
+  object JsonBufferDataMacros extends DataContextMacros[JsonBuffer, JsonBufferAst] {
+    
+    def companion(c: Context): c.Expr[DataCompanion[JsonBuffer, JsonBufferAst]] =
+      c.universe.reify(JsonBuffer)
+
+    def parseSource(s: List[String]) = try {
+      JsonValidator.validate(s)
+      None
+    } catch {
+      case JsonValidator.ValidationException(strNo, pos, expected, found) =>
+        val f = if(found == '\0') "end of input" else s"'$found'"
+        Some((strNo, pos,
+            s"Failed to parse JsonBuffer literal: Expected $expected, but found $f."))
+    }
+    
+    override def contextMacro(c: Context)(exprs: c.Expr[ForcedConversion[JsonBuffer]]*)
+        (parser: c.Expr[Parser[String, JsonBufferAst]]): c.Expr[JsonBuffer] =
+      super.contextMacro(c)(exprs: _*)(parser)
   }
-  
-  override def contextMacro(c: Context)(exprs: c.Expr[ForcedConversion[JsonBuffer]]*)
-      (parser: c.Expr[Parser[String, JsonBufferAst]]): c.Expr[JsonBuffer] =
-    super.contextMacro(c)(exprs: _*)(parser)
-
 }
 
 /** Provides support for JSON literals, in the form json" { } " or json""" { } """.
@@ -84,7 +86,7 @@ class JsonBufferStrings[R <: JsonBufferAst](sc: StringContext) {
   class JsonBufferContext() extends DataContext(JsonBuffer, sc) {
     def apply(exprs: ForcedConversion[JsonBuffer]*)(implicit parser: Parser[String,
         JsonBufferAst]): JsonBuffer =
-      macro JsonBufferDataMacros.contextMacro
+      macro internal.JsonBufferDataMacros.contextMacro
   }
   val jsonBuffer = new JsonBufferContext()
 }

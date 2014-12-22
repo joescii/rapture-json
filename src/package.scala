@@ -65,14 +65,8 @@ package internal {
     implicit def jsonExtractorMacro[T <: Product]: Extractor[T, Json] =
       macro internal.JsonMacros.jsonExtractorMacro[T]
     
-    implicit def jsonBufferExtractorMacro[T <: Product]: Extractor[T, JsonBuffer] =
-      macro internal.JsonMacros.jsonBufferExtractorMacro[T]
-    
     implicit def jsonSerializerMacro[T <: Product](implicit ast: JsonAst): Serializer[T, Json] =
       macro internal.JsonMacros.jsonSerializerMacro[T]
-    
-    implicit def jsonBufferSerializerMacro[T <: Product](implicit ast: JsonBufferAst):
-        Serializer[T, JsonBuffer] = macro internal.JsonMacros.jsonBufferSerializerMacro[T]
   }
 
   trait package_1 extends package_2
