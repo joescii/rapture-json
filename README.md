@@ -56,7 +56,7 @@ If you use Maven, include the following dependency:
 <dependency>
   <groupId>com.propensive</groupId>
   <artifactId>rapture-json-[backend]_2.10</artifactId>
-  <version>1.0.8<version>
+  <version>1.0.8</version>
 </dependency>
 ```
 
