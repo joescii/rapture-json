@@ -1,6 +1,6 @@
 /**********************************************************************************************\
 * Rapture JSON Library                                                                         *
-* Version 1.0.8                                                                                *
+* Version 1.1.0                                                                                *
 *                                                                                              *
 * The primary distribution site is                                                             *
 *                                                                                              *
@@ -24,7 +24,9 @@ import rapture.data._
 
 object JsonVerifier {
 
-  case class VerifierException(strNo: Int, pos: Int, expected: String, found: Char) extends Exception
+  case class VerifierException(strNo: Int, pos: Int, expected: String, found: Char)
+      extends Exception
+  
   case class DuplicateKeyException(strNo: Int, pos: Int, key: String) extends Exception
 
   def verify(parts: List[String]) = {

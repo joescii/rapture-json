@@ -1,6 +1,6 @@
 /**********************************************************************************************\
 * Rapture JSON Library                                                                         *
-* Version 1.0.8                                                                                *
+* Version 1.1.0                                                                                *
 *                                                                                              *
 * The primary distribution site is                                                             *
 *                                                                                              *
@@ -49,7 +49,8 @@ object JsonDataMacros extends DataContextMacros[Json, JsonAst] {
 
 object JsonBufferDataMacros extends DataContextMacros[JsonBuffer, JsonBufferAst] {
   
-  def companion(c: Context): c.Expr[DataCompanion[JsonBuffer, JsonBufferAst]] = c.universe.reify(JsonBuffer)
+  def companion(c: Context): c.Expr[DataCompanion[JsonBuffer, JsonBufferAst]] =
+    c.universe.reify(JsonBuffer)
 
   def parseSource(s: List[String]) = try {
     JsonVerifier.verify(s)
@@ -57,10 +58,12 @@ object JsonBufferDataMacros extends DataContextMacros[JsonBuffer, JsonBufferAst]
   } catch {
     case JsonVerifier.VerifierException(strNo, pos, expected, found) =>
       val f = if(found == '\0') "end of input" else s"'$found'"
-      Some((strNo, pos, s"Failed to parse JsonBuffer literal: Expected $expected, but found $f."))
+      Some((strNo, pos,
+          s"Failed to parse JsonBuffer literal: Expected $expected, but found $f."))
   }
   
-  override def contextMacro(c: Context)(exprs: c.Expr[ForcedConversion[JsonBuffer]]*)(parser: c.Expr[Parser[String, JsonBufferAst]]): c.Expr[JsonBuffer] =
+  override def contextMacro(c: Context)(exprs: c.Expr[ForcedConversion[JsonBuffer]]*)
+      (parser: c.Expr[Parser[String, JsonBufferAst]]): c.Expr[JsonBuffer] =
     super.contextMacro(c)(exprs: _*)(parser)
 
 }

@@ -1,6 +1,6 @@
 /**********************************************************************************************\
 * Rapture JSON Library                                                                         *
-* Version 1.0.8                                                                                *
+* Version 1.1.0                                                                                *
 *                                                                                              *
 * The primary distribution site is                                                             *
 *                                                                                              *
@@ -40,7 +40,7 @@ package internal {
         def construct(any: Json, fail: Exception, dataAst: DataAst) =
           Json.construct(VCell(JsonDataType.jsonSerializer.serialize(any)), Vector())
       }
-
+    
     implicit val stringExtractor: Extractor[String, Json] =
       new Extractor[String, Json] {
         def construct(any: Json, fail: Exception, ast: DataAst) =
@@ -73,10 +73,19 @@ package internal {
   }
 
   trait Extractors_1 {
-    implicit def jsonBufferExtractor[T](implicit jsonAst: JsonAst, ext: Extractor[T, Json]): Extractor[T, JsonBuffer] =
+    implicit def jsonBufferExtractor[T](implicit jsonAst: JsonAst, ext: Extractor[T, Json]):
+        Extractor[T, JsonBuffer] =
       new Extractor[T, JsonBuffer] {
         def construct(any: JsonBuffer, fail: Exception, ast: DataAst): T =
           ext.construct(Json.construct(VCell(any.$root.value), Vector()), fail, ast)
       }
+    
+    implicit def jsonBufferToJsonExtractor(implicit ast: JsonBufferAst):
+        Extractor[JsonBuffer, Json] =
+      new Extractor[JsonBuffer, Json] {
+        def construct(any: Json, fail: Exception, dataAst: DataAst) =
+          JsonBuffer.construct(VCell(JsonDataType.jsonSerializer.serialize(any)), Vector())
+      }
+
   }
 }

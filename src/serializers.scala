@@ -1,6 +1,6 @@
 /**********************************************************************************************\
 * Rapture JSON Library                                                                         *
-* Version 1.0.8                                                                                *
+* Version 1.1.0                                                                                *
 *                                                                                              *
 * The primary distribution site is                                                             *
 *                                                                                              *
@@ -38,7 +38,8 @@ package internal {
     case class BasicJsonSerializer[T](serialization: T => Any)
         extends Serializer[T, Json] { def serialize(t: T): Any = serialization(t) }
 
-    implicit def jsonBufferSerializer[T](implicit ser: Serializer[T, Json]): Serializer[T, JsonBuffer] =
+    implicit def jsonBufferSerializer[T](implicit ser: Serializer[T, Json]):
+        Serializer[T, JsonBuffer] =
       new Serializer[T, JsonBuffer] { def serialize(t: T): Any = ser.serialize(t) }
 
     implicit def intSerializer(implicit ast: JsonAst): Serializer[Int, Json] =
