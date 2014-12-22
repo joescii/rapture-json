@@ -91,7 +91,7 @@ package internal {
 
     implicit def directJsonSerializer[T: DirectJsonSerializer](implicit ast: JsonAst):
         Serializer[T, Json] =
-      BasicJsonSerializer(obj => jsonSerializer.serialize(Json.construct(VCell(obj),
+      BasicJsonSerializer(obj => jsonSerializer.serialize(Json.construct(MutableCell(obj),
           Vector())(?[DirectJsonSerializer[T]].ast)))
 
     implicit def jsonSerializer[JsonType <: JsonDataType[JsonType, _ <: JsonAst]]

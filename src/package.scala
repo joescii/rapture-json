@@ -28,6 +28,8 @@ import language.experimental.macros
 
 object `package` extends internal.package_1 {
 
+  val patternMatching = rapture.data.patternMatching
+
   implicit def jsonCastExtractor[T: JsonCastExtractor](implicit ast: JsonAst):
       Extractor[T, JsonDataType[_, _ <: JsonAst]] =
     new Extractor[T, JsonDataType[_, _ <: JsonAst]] {
@@ -37,7 +39,7 @@ object `package` extends internal.package_1 {
             val norm = value.$normalize
             try {
               if(ast == ast2) norm.asInstanceOf[T]
-              else JsonDataType.jsonSerializer.serialize(Json.construct(VCell(norm),
+              else JsonDataType.jsonSerializer.serialize(Json.construct(MutableCell(norm),
                   Vector())(ast2)).asInstanceOf[T]
             } catch { case e: ClassCastException =>
               throw TypeMismatchException(ast.getType(norm),

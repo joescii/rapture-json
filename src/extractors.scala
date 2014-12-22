@@ -38,7 +38,7 @@ package internal {
     implicit def jsonExtractor(implicit ast: JsonAst): Extractor[Json, Json] =
       new Extractor[Json, Json] {
         def construct(any: Json, fail: Exception, dataAst: DataAst) =
-          Json.construct(VCell(JsonDataType.jsonSerializer.serialize(any)), Vector())
+          Json.construct(MutableCell(JsonDataType.jsonSerializer.serialize(any)), Vector())
       }
     
     implicit val stringExtractor: Extractor[String, Json] =
@@ -77,14 +77,15 @@ package internal {
         Extractor[T, JsonBuffer] =
       new Extractor[T, JsonBuffer] {
         def construct(any: JsonBuffer, fail: Exception, ast: DataAst): T =
-          ext.construct(Json.construct(VCell(any.$root.value), Vector()), fail, ast)
+          ext.construct(Json.construct(MutableCell(any.$root.value), Vector()), fail, ast)
       }
     
     implicit def jsonBufferToJsonExtractor(implicit ast: JsonBufferAst):
         Extractor[JsonBuffer, Json] =
       new Extractor[JsonBuffer, Json] {
         def construct(any: Json, fail: Exception, dataAst: DataAst) =
-          JsonBuffer.construct(VCell(JsonDataType.jsonSerializer.serialize(any)), Vector())
+          JsonBuffer.construct(MutableCell(JsonDataType.jsonSerializer.serialize(any)),
+              Vector())
       }
 
   }

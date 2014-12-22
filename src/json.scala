@@ -70,7 +70,7 @@ trait JsonDataType[+T <: JsonDataType[T, AstType], AstType <: JsonAst]
 
 object JsonBuffer extends JsonDataCompanion[JsonBuffer, JsonBufferAst] {
   
-  def construct(any: VCell, path: Vector[Either[Int, String]])(implicit ast:
+  def construct(any: MutableCell, path: Vector[Either[Int, String]])(implicit ast:
       JsonBufferAst): JsonBuffer = new JsonBuffer(any, path)
 }
 
@@ -78,7 +78,7 @@ object JsonBuffer extends JsonDataCompanion[JsonBuffer, JsonBufferAst] {
   * pretty printer. */
 object Json extends JsonDataCompanion[Json, JsonAst] {
   
-  def construct(any: VCell, path: Vector[Either[Int, String]])(implicit ast:
+  def construct(any: MutableCell, path: Vector[Either[Int, String]])(implicit ast:
       JsonAst): Json = new Json(any, path)
 
   def extractor[T](implicit ext: Extractor[T, Json]) = ext
@@ -86,10 +86,11 @@ object Json extends JsonDataCompanion[Json, JsonAst] {
 }
 
 /** Represents some parsed JSON. */
-class Json(val $root: VCell, val $path: Vector[Either[Int, String]] = Vector())(implicit
+class Json(val $root: MutableCell, val $path: Vector[Either[Int, String]] = Vector())(implicit
     val $ast: JsonAst) extends JsonDataType[Json, JsonAst] with DynamicData[Json, JsonAst] {
   
-  def $wrap(any: Any, path: Vector[Either[Int, String]]): Json = new Json(VCell(any), path)
+  def $wrap(any: Any, path: Vector[Either[Int, String]]): Json =
+    new Json(MutableCell(any), path)
   
   def $deref(path: Vector[Either[Int, String]]): Json = new Json($root, path)
 
@@ -105,13 +106,13 @@ class Json(val $root: VCell, val $path: Vector[Either[Int, String]] = Vector())(
     }
 }
 
-class JsonBuffer(val $root: VCell, val $path: Vector[Either[Int, String]] = Vector())
+class JsonBuffer(val $root: MutableCell, val $path: Vector[Either[Int, String]] = Vector())
     (implicit val $ast: JsonBufferAst) extends
     JsonDataType[JsonBuffer, JsonBufferAst] with
     MutableDataType[JsonBuffer, JsonBufferAst] with DynamicData[JsonBuffer, JsonBufferAst] {
 
   def $wrap(any: Any, path: Vector[Either[Int, String]]): JsonBuffer =
-    new JsonBuffer(VCell(any), path)
+    new JsonBuffer(MutableCell(any), path)
   
   def $deref(path: Vector[Either[Int, String]]): JsonBuffer = new JsonBuffer($root, path)
   
