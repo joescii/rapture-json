@@ -29,10 +29,9 @@ import scala.annotation._
 import language.experimental.macros
 import language.higherKinds
 
-case class DirectJsonSerializer[T](ast: JsonAst)
-
-
 package internal {
+  case class DirectJsonSerializer[T](ast: JsonAst)
+  
   trait Serializers {
 
     case class BasicJsonSerializer[T](serialization: T => Any)

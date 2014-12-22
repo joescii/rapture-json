@@ -26,28 +26,28 @@ import rapture.data._
 import language.experimental.macros
 import scala.reflect.macros._
 
-object JsonDataMacros extends DataContextMacros[Json, JsonAst] {
-  
-  def companion(c: Context): c.Expr[DataCompanion[Json, JsonAst]] = c.universe.reify(Json)
-
-  def parseSource(s: List[String]) = try {
-    JsonValidator.validate(s)
-    None
-  } catch {
-    case JsonValidator.ValidationException(strNo, pos, expected, found) =>
-      val f = if(found == '\0') "end of input" else s"'$found'"
-      Some((strNo, pos, s"Failed to parse Json literal: Expected $expected, but found $f"))
-    case JsonValidator.DuplicateKeyException(strNo, pos, key) =>
-      Some((strNo, pos, s"""Duplicate key found in Json literal: "$key""""))
-  }
-  
-  override def contextMacro(c: Context)(exprs: c.Expr[ForcedConversion[Json]]*)
-      (parser: c.Expr[Parser[String, JsonAst]]): c.Expr[Json] =
-    super.contextMacro(c)(exprs: _*)(parser)
-
-}
-
 package internal {
+  
+  object JsonDataMacros extends DataContextMacros[Json, JsonAst] {
+    
+    def companion(c: Context): c.Expr[DataCompanion[Json, JsonAst]] = c.universe.reify(Json)
+
+    def parseSource(s: List[String]) = try {
+      JsonValidator.validate(s)
+      None
+    } catch {
+      case JsonValidator.ValidationException(strNo, pos, expected, found) =>
+        val f = if(found == '\0') "end of input" else s"'$found'"
+        Some((strNo, pos, s"Failed to parse Json literal: Expected $expected, but found $f"))
+      case JsonValidator.DuplicateKeyException(strNo, pos, key) =>
+        Some((strNo, pos, s"""Duplicate key found in Json literal: "$key""""))
+    }
+    
+    override def contextMacro(c: Context)(exprs: c.Expr[ForcedConversion[Json]]*)
+        (parser: c.Expr[Parser[String, JsonAst]]): c.Expr[Json] =
+      super.contextMacro(c)(exprs: _*)(parser)
+
+  }
 
   object JsonBufferDataMacros extends DataContextMacros[JsonBuffer, JsonBufferAst] {
     
@@ -68,25 +68,24 @@ package internal {
         (parser: c.Expr[Parser[String, JsonBufferAst]]): c.Expr[JsonBuffer] =
       super.contextMacro(c)(exprs: _*)(parser)
   }
-}
-
-/** Provides support for JSON literals, in the form json" { } " or json""" { } """.
-  * Interpolation is used to substitute variable names into the JSON, and to extract values
-  * from a JSON string. */
-class JsonStrings(sc: StringContext) {
-  class JsonContext() extends DataContext(Json, sc) {
-    def apply(exprs: ForcedConversion[Json]*)(implicit parser: Parser[String, JsonAst]): Json =
-      macro JsonDataMacros.contextMacro
-  }
-  val json = new JsonContext()
-}
-
-class JsonBufferStrings[R <: JsonBufferAst](sc: StringContext) {
   
-  class JsonBufferContext() extends DataContext(JsonBuffer, sc) {
-    def apply(exprs: ForcedConversion[JsonBuffer]*)(implicit parser: Parser[String,
-        JsonBufferAst]): JsonBuffer =
-      macro internal.JsonBufferDataMacros.contextMacro
+  /** Provides support for JSON literals, in the form json" { } " or json""" { } """.
+    * Interpolation is used to substitute variable names into the JSON, and to extract values
+    * from a JSON string. */
+  class JsonStrings(sc: StringContext) {
+    class JsonContext() extends DataContext(Json, sc) {
+      def apply(exprs: ForcedConversion[Json]*)(implicit parser: Parser[String, JsonAst]): Json =
+        macro JsonDataMacros.contextMacro
+    }
+    val json = new JsonContext()
   }
-  val jsonBuffer = new JsonBufferContext()
+
+  class JsonBufferStrings(sc: StringContext) {
+    class JsonBufferContext() extends DataContext(JsonBuffer, sc) {
+      def apply(exprs: ForcedConversion[JsonBuffer]*)(implicit parser: Parser[String,
+          JsonBufferAst]): JsonBuffer =
+        macro JsonBufferDataMacros.contextMacro
+    }
+    val jsonBuffer = new JsonBufferContext()
+  }
 }

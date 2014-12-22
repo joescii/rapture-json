@@ -30,9 +30,10 @@ import scala.annotation._
 import language.experimental.macros
 import language.higherKinds
 
-case class JsonCastExtractor[T](ast: JsonAst, dataType: DataTypes.DataType)
-
 package internal {
+
+  case class JsonCastExtractor[T](ast: JsonAst, dataType: DataTypes.DataType)
+  
   trait Extractors extends Extractors_1 {
 
     implicit def jsonExtractor(implicit ast: JsonAst): Extractor[Json, Json] =
