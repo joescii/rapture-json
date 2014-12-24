@@ -1,6 +1,6 @@
 /**********************************************************************************************\
 * Rapture JSON Library                                                                         *
-* Version 1.0.7                                                                                *
+* Version 1.1.0                                                                                *
 *                                                                                              *
 * The primary distribution site is                                                             *
 *                                                                                              *
@@ -23,54 +23,14 @@ package rapture.json
 import rapture.core._
 import rapture.data._
 
-import language.higherKinds
-import language.experimental.macros
+object `package` {
 
-trait VeryLowPriorityPackage {
-  implicit def jsonExtractorMacro[T <: Product]: Extractor[T, Json] =
-    macro JsonMacros.jsonExtractorMacro[T]
+  val patternMatching = rapture.data.patternMatching
+
+  implicit def jsonStringContext(sc: StringContext)(implicit parser: Parser[String, JsonAst]) =
+    new internal.JsonStrings(sc)
   
-  implicit def jsonBufferExtractorMacro[T <: Product]: Extractor[T, JsonBuffer] =
-    macro JsonMacros.jsonBufferExtractorMacro[T]
-  
-  implicit def jsonSerializerMacro[T <: Product](implicit ast: JsonAst): Serializer[T, Json] =
-    macro JsonMacros.jsonSerializerMacro[T]
-  
-  implicit def jsonBufferSerializerMacro[T <: Product](implicit ast: JsonBufferAst):
-      Serializer[T, JsonBuffer] = macro JsonMacros.jsonBufferSerializerMacro[T]
+  implicit def jsonBufferStringContext(sc: StringContext)
+      (implicit parser: Parser[String, JsonBufferAst]) =
+    new internal.JsonBufferStrings(sc)
 }
-
-trait LowPriorityPackage extends VeryLowPriorityPackage
-
-object `package` extends Serializers with Extractors with LowPriorityPackage {
-
-  implicit def jsonCastExtractor[T: JsonCastExtractor](implicit ast: JsonAst):
-      Extractor[T, JsonDataType[_, _ <: JsonAst]] =
-    new Extractor[T, JsonDataType[_, _ <: JsonAst]] {
-      def construct(value: JsonDataType[_, _ <: JsonAst], ast2: DataAst): T =
-        ast2 match {
-          case ast2: JsonAst =>
-            val norm = value.$normalize
-            try {
-              if(ast == ast2) norm.asInstanceOf[T]
-              else jsonSerializer.serialize(Json.construct(VCell(norm),
-                  Vector())(ast2)).asInstanceOf[T]
-            } catch { case e: ClassCastException =>
-              throw TypeMismatchException(ast.getType(norm),
-                  implicitly[JsonCastExtractor[T]].dataType, Vector())
-            }
-          case _ => ???
-        }
-    }
-
-  implicit class DynamicWorkaround(json: Json) {
-    def self: Json = json.selectDynamic("json")
-  }
-
-  implicit def jsonStrings(sc: StringContext)(implicit parser: Parser[String, JsonAst]) =
-    new JsonStrings(sc)
-  
-  implicit def jsonBufferStrings(sc: StringContext)(implicit parser: Parser[String,
-      JsonBufferAst]) = new JsonBufferStrings(sc)
-}
-

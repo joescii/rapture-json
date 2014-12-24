@@ -14,11 +14,17 @@ in Scala. Rapture JSON is part of the [Rapture](http://rapture.io/) project.
  - Simple, efficient conversion between different backends
  - Support for both immutable and mutable JSON
  - Flexible choice of error handling strategies using [modes](https://github.com/propensive/rapture-core)
+ - Can be easily extended using composable user-defined extractors and serializers
 
 ## Availability
 
+<<<<<<< HEAD
 Rapture JSON 1.0.6 is available under the *Apache 2.0 License* from Maven Central
 with group ID `com.propensive` and artifact ID `rapture-json_2.11`.
+=======
+Rapture JSON 1.0.8 is available under the *Apache 2.0 License* from Maven Central
+with group ID `com.propensive` and artifact ID `rapture-json_2.10`.
+>>>>>>> master
 
 ### SBT
 
@@ -26,7 +32,7 @@ You can include Rapture JSON as a dependency in your own project by adding the
 following library dependency to your build file:
 
 ```scala
-libraryDependencies ++= Seq("com.propensive" %% "rapture-json-[backend]" % "1.0.6")
+libraryDependencies ++= Seq("com.propensive" %% "rapture-json-[backend]" % "1.0.8")
 ```
 
 where `[backend]` is one of the following JSON backends:
@@ -44,7 +50,7 @@ the following dependency, though this is not recommended due to the poor
 performance characteristics of this parser.
 
 ```scala
-libraryDependencies ++= Seq("com.propensive" %% "rapture-json" % "1.0.6")
+libraryDependencies ++= Seq("com.propensive" %% "rapture-json" % "1.0.8")
 ```
 
 ### Maven
@@ -54,8 +60,13 @@ If you use Maven, include the following dependency:
 ```xml
 <dependency>
   <groupId>com.propensive</groupId>
+<<<<<<< HEAD
   <artifactId>rapture-json-[backend]_2.11</artifactId>
   <version>1.0.6<version>
+=======
+  <artifactId>rapture-json-[backend]_2.10</artifactId>
+  <version>1.0.8</version>
+>>>>>>> master
 </dependency>
 ```
 
@@ -486,7 +497,10 @@ will likely result in better performance.
 
 ## Converting JSON
 
-Depending on how a JSON value is created, the same Scala type is used, regardless of the JSON backend that was used to create it.
+All JSON is represented by the same Scala type, `Json`, regardless of what type
+of value it contains, and which backend was used to create it.
+
+FIXME: Complete this
 
 ## Outputting JSON
 
@@ -512,3 +526,7 @@ For example,
 import formatters.compact
 val out = Json.format(json)
 ```
+
+## Defining custom extractors and serializers
+
+FIXME: Complete this

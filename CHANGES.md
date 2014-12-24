@@ -34,6 +34,15 @@ This document describes the changes included in each release of Rapture JSON.
  - Extraction into `Try`s
  - Compile-time checking of Json literals
 
-## Version 1.0.8 (not yet released)
+## Version 1.0.8
  - Renamed implicit imports from different backends, so later imports shadow earlier ones, rather than being ambiguous
  - Fixed issue with successful compilation of unextractable case class parameter values
+
+## Version 1.1.0 (not yet released)
+ - Fixed return type of `parse` method
+ - Better debugging for case class extractor generation failures
+ - Added convenience methods for composing serializers
+ - Upgrade to Rapture Core 1.1.0
+ - Provided a `|+|` method for combining extraction exceptions
+ - toString produces "compact" output now. Use import formatters.humanReadable._ and Json.format(json) for the old-style output
+ - Fixed #23. Extraction of `Option`s now works again
