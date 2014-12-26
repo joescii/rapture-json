@@ -38,19 +38,19 @@ package internal {
 
     implicit def jsonExtractor(implicit ast: JsonAst): Extractor[Json, Json] =
       new Extractor[Json, Json] {
-        def construct(any: Json, fail: Exception, dataAst: DataAst) =
+        def construct(any: Json, dataAst: DataAst) =
           Json.construct(MutableCell(JsonDataType.jsonSerializer.serialize(any)), Vector())
       }
     
     implicit val stringExtractor: Extractor[String, Json] =
       new Extractor[String, Json] {
-        def construct(any: Json, fail: Exception, ast: DataAst) =
+        def construct(any: Json, ast: DataAst) =
           any.$ast.getString(any.$root.value)
       }
 
     implicit val doubleExtractor: Extractor[Double, Json] =
       new Extractor[Double, Json] {
-        def construct(any: Json, fail: Exception, ast: DataAst) =
+        def construct(any: Json, ast: DataAst) =
           any.$ast.getDouble(any.$root.value)
       }
 
@@ -59,13 +59,13 @@ package internal {
 
     implicit val booleanExtractor: Extractor[Boolean, Json] =
       new Extractor[Boolean, Json] {
-        def construct(any: Json, fail: Exception, ast: DataAst) =
+        def construct(any: Json, ast: DataAst) =
           any.$ast.getBoolean(any.$root.value)
       }
     
     implicit val bigDecimalExtractor: Extractor[BigDecimal, Json] =
       new Extractor[BigDecimal, Json] {
-        def construct(any: Json, fail: Exception, ast: DataAst) =
+        def construct(any: Json, ast: DataAst) =
           any.$ast.getBigDecimal(any.$root.value)
       }
     
@@ -77,14 +77,14 @@ package internal {
     implicit def jsonBufferExtractor[T](implicit jsonAst: JsonAst, ext: Extractor[T, Json]):
         Extractor[T, JsonBuffer] =
       new Extractor[T, JsonBuffer] {
-        def construct(any: JsonBuffer, fail: Exception, ast: DataAst): T =
-          ext.construct(Json.construct(MutableCell(any.$root.value), Vector()), fail, ast)
+        def construct(any: JsonBuffer, ast: DataAst): T =
+          ext.construct(Json.construct(MutableCell(any.$root.value), Vector()), ast)
       }
     
     implicit def jsonBufferToJsonExtractor(implicit ast: JsonBufferAst):
         Extractor[JsonBuffer, Json] =
       new Extractor[JsonBuffer, Json] {
-        def construct(any: Json, fail: Exception, dataAst: DataAst) =
+        def construct(any: Json, dataAst: DataAst) =
           JsonBuffer.construct(MutableCell(JsonDataType.jsonSerializer.serialize(any)),
               Vector())
       }
