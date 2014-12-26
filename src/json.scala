@@ -109,7 +109,7 @@ object Json extends internal.JsonDataCompanion[Json, JsonAst] with internal.Json
   implicit def jsonCastExtractor[T: internal.JsonCastExtractor](implicit ast: JsonAst):
       Extractor[T, internal.JsonDataType[_, _ <: JsonAst]] =
     new Extractor[T, internal.JsonDataType[_, _ <: JsonAst]] {
-      def construct(value: internal.JsonDataType[_, _ <: JsonAst], fail: Exception, ast2: DataAst): T =
+      def construct(value: internal.JsonDataType[_, _ <: JsonAst], ast2: DataAst): T =
         ast2 match {
           case ast2: JsonAst =>
             val norm = value.$normalize
