@@ -119,7 +119,7 @@ object Json extends internal.JsonDataCompanion[Json, JsonAst] with internal.Json
                   Vector())(ast2)).asInstanceOf[T]
             } catch { case e: ClassCastException =>
               throw TypeMismatchException(ast.getType(norm),
-                  implicitly[internal.JsonCastExtractor[T]].dataType, Vector())
+                  implicitly[internal.JsonCastExtractor[T]].dataType)
             }
           case _ => ???
         }
