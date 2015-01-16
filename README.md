@@ -422,7 +422,7 @@ json.fruit.as[String] match {
   case Right(f) =>
     s"Found fruit $f"
   case Left(TypeMismatchException(found, _, _)) =>
-    s"Fruit was the wrong type: $found)
+    s"Fruit was the wrong type: $found"
   case Left(MissingValueException(path)) =>
     s"Fruit value was missing at path $path"
 }
