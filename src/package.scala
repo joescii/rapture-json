@@ -28,9 +28,9 @@ object `package` {
   val patternMatching = rapture.data.patternMatching
 
   implicit def jsonStringContext(sc: StringContext)(implicit parser: Parser[String, JsonAst]) =
-    new internal.JsonStrings(sc)
+    new JsonStrings(sc)
   
   implicit def jsonBufferStringContext(sc: StringContext)
       (implicit parser: Parser[String, JsonBufferAst]) =
-    new internal.JsonBufferStrings(sc)
+    new JsonBufferStrings(sc)
 }

@@ -30,64 +30,61 @@ import scala.annotation._
 import language.experimental.macros
 import language.higherKinds
 
-package internal {
+private[json] case class JsonCastExtractor[T](ast: JsonAst, dataType: DataTypes.DataType)
 
-  case class JsonCastExtractor[T](ast: JsonAst, dataType: DataTypes.DataType)
+private[json] trait Extractors extends Extractors_1 {
+
+  implicit def jsonExtractor(implicit ast: JsonAst): Extractor[Json, Json] =
+    new Extractor[Json, Json] {
+      def construct(any: Json, dataAst: DataAst) =
+        Json.construct(MutableCell(JsonDataType.jsonSerializer.serialize(any)), Vector())
+    }
   
-  trait Extractors extends Extractors_1 {
+  implicit val stringExtractor: Extractor[String, Json] =
+    new Extractor[String, Json] {
+      def construct(any: Json, ast: DataAst) =
+        any.$ast.getString(any.$root.value)
+    }
 
-    implicit def jsonExtractor(implicit ast: JsonAst): Extractor[Json, Json] =
-      new Extractor[Json, Json] {
-        def construct(any: Json, dataAst: DataAst) =
-          Json.construct(MutableCell(JsonDataType.jsonSerializer.serialize(any)), Vector())
-      }
-    
-    implicit val stringExtractor: Extractor[String, Json] =
-      new Extractor[String, Json] {
-        def construct(any: Json, ast: DataAst) =
-          any.$ast.getString(any.$root.value)
-      }
+  implicit val doubleExtractor: Extractor[Double, Json] =
+    new Extractor[Double, Json] {
+      def construct(any: Json, ast: DataAst) =
+        any.$ast.getDouble(any.$root.value)
+    }
 
-    implicit val doubleExtractor: Extractor[Double, Json] =
-      new Extractor[Double, Json] {
-        def construct(any: Json, ast: DataAst) =
-          any.$ast.getDouble(any.$root.value)
-      }
+  implicit val intExtractor: Extractor[Int, Json] =
+    doubleExtractor.map(_.toInt)
 
-    implicit val intExtractor: Extractor[Int, Json] =
-      doubleExtractor.map(_.toInt)
+  implicit val booleanExtractor: Extractor[Boolean, Json] =
+    new Extractor[Boolean, Json] {
+      def construct(any: Json, ast: DataAst) =
+        any.$ast.getBoolean(any.$root.value)
+    }
+  
+  implicit val bigDecimalExtractor: Extractor[BigDecimal, Json] =
+    new Extractor[BigDecimal, Json] {
+      def construct(any: Json, ast: DataAst) =
+        any.$ast.getBigDecimal(any.$root.value)
+    }
+  
+  implicit val bigIntExtractor: Extractor[BigInt, Json] =
+    bigDecimalExtractor.map(_.toBigInt)
+}
 
-    implicit val booleanExtractor: Extractor[Boolean, Json] =
-      new Extractor[Boolean, Json] {
-        def construct(any: Json, ast: DataAst) =
-          any.$ast.getBoolean(any.$root.value)
-      }
-    
-    implicit val bigDecimalExtractor: Extractor[BigDecimal, Json] =
-      new Extractor[BigDecimal, Json] {
-        def construct(any: Json, ast: DataAst) =
-          any.$ast.getBigDecimal(any.$root.value)
-      }
-    
-    implicit val bigIntExtractor: Extractor[BigInt, Json] =
-      bigDecimalExtractor.map(_.toBigInt)
-  }
+private[json] trait Extractors_1 {
+  implicit def jsonBufferExtractor[T](implicit jsonAst: JsonAst, ext: Extractor[T, Json]):
+      Extractor[T, JsonBuffer] =
+    new Extractor[T, JsonBuffer] {
+      def construct(any: JsonBuffer, ast: DataAst): T =
+        ext.construct(Json.construct(MutableCell(any.$root.value), Vector()), ast)
+    }
+  
+  implicit def jsonBufferToJsonExtractor(implicit ast: JsonBufferAst):
+      Extractor[JsonBuffer, Json] =
+    new Extractor[JsonBuffer, Json] {
+      def construct(any: Json, dataAst: DataAst) =
+        JsonBuffer.construct(MutableCell(JsonDataType.jsonSerializer.serialize(any)),
+            Vector())
+    }
 
-  trait Extractors_1 {
-    implicit def jsonBufferExtractor[T](implicit jsonAst: JsonAst, ext: Extractor[T, Json]):
-        Extractor[T, JsonBuffer] =
-      new Extractor[T, JsonBuffer] {
-        def construct(any: JsonBuffer, ast: DataAst): T =
-          ext.construct(Json.construct(MutableCell(any.$root.value), Vector()), ast)
-      }
-    
-    implicit def jsonBufferToJsonExtractor(implicit ast: JsonBufferAst):
-        Extractor[JsonBuffer, Json] =
-      new Extractor[JsonBuffer, Json] {
-        def construct(any: Json, dataAst: DataAst) =
-          JsonBuffer.construct(MutableCell(JsonDataType.jsonSerializer.serialize(any)),
-              Vector())
-      }
-
-  }
 }
