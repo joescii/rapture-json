@@ -48,3 +48,7 @@ This document describes the changes included in each release of Rapture JSON.
  - Fixed #23. Extraction of `Option`s now works again
  - Cleanup of public API, and concealment of internal APIs in an `internal` package
  - Fixes for various incorrectly-reported exceptions
+
+## Version 1.1.1
+ - Fix for type of exception thrown in Jackson integration
+ - Support for extraction and serialization of value classes
