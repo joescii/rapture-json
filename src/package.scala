@@ -27,6 +27,9 @@ object `package` {
 
   val patternMatching = rapture.data.patternMatching
 
+  type Extractor[T, -D] = rapture.data.Extractor[T, D]
+  type Serializer[T, -D] = rapture.data.Serializer[T, D]
+
   implicit def jsonStringContext(sc: StringContext)(implicit parser: Parser[String, JsonAst]) =
     new JsonStrings(sc)
   
