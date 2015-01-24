@@ -49,6 +49,7 @@ This document describes the changes included in each release of Rapture JSON.
  - Cleanup of public API, and concealment of internal APIs in an `internal` package
  - Fixes for various incorrectly-reported exceptions
 
-## Version 1.1.1
+## Version 1.2.0 (not yet released)
  - Fix for type of exception thrown in Jackson integration
  - Support for extraction and serialization of value classes
+ - Added support for XPath-style \ and \\ operators

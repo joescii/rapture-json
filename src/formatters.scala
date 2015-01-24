@@ -57,7 +57,7 @@ private[json] class formatters_1 {
           if(ast.getBoolean(j)) "true" else "false"
         } else if(ast.isNumber(j)) {
           val bd = ast.getBigDecimal(j)
-          if(bd.isWhole) bd.toBigInt.toString else bd.toString
+          if(bd.isWhole) String(bd.toBigInt) else String(bd)
         } else if(ast.isArray(j)) {
           val arr = ast.getArray(j)
           if(arr.isEmpty) "[]" else List("[", arr map { v =>
