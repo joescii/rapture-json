@@ -114,8 +114,8 @@ object Json extends JsonDataCompanion[Json, JsonAst] with Json_1 {
               else JsonDataType.jsonSerializer.serialize(Json.construct(MutableCell(norm),
                   Vector())(ast2)).asInstanceOf[T]
             } catch { case e: ClassCastException =>
-              throw TypeMismatchException(ast.getType(norm),
-                  implicitly[JsonCastExtractor[T]].dataType)
+              throw TypeMismatchException(Some(ast.getType(norm) ->
+                  implicitly[JsonCastExtractor[T]].dataType))
             }
           case _ => ???
         }
