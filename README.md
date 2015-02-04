@@ -503,9 +503,9 @@ more appropriate for some applications.
 The more general method is to use the `Json.format` method, with an appropriate
 implicit `Formatter` in scope. Two formatters are provided as standard:
 
- - `formatters.humanReadable`, which formats the JSON with newlines and
+ - `formatters.humanReadable._`, which formats the JSON with newlines and
    indentation, attempting to make it as readable as possible,
- - `formatters.compact`, which includes no unnecessary whitespace
+ - `formatters.compact._`, which includes no unnecessary whitespace
 
 Both formatters return `String`s, though it is possible for other backends to
 provide their own formatters for outputting to other types.
