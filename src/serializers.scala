@@ -98,7 +98,7 @@ private[json] trait Serializers {
           else if(oldAst.isObject(v)) ast.fromObject(oldAst.getObject(v).mapValues(convert))
           else ast.nullValue
 
-        convert(j.$normalize)
+        convert(j.$normalize) // FIXME: Use custom mode
       }
     })
 }

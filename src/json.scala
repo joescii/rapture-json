@@ -97,8 +97,8 @@ object Json extends JsonDataCompanion[Json, JsonAst] with Json_1 {
   implicit def jsonCastExtractor[T: JsonCastExtractor](implicit ast: JsonAst):
       Extractor[T, JsonDataType[_, _ <: JsonAst]] =
     new Extractor[T, JsonDataType[_, _ <: JsonAst]] {
-      def construct(value: JsonDataType[_, _ <: JsonAst], ast2: DataAst): T =
-        ast2 match {
+      def extract(value: JsonDataType[_, _ <: JsonAst], ast2: DataAst, mode: Mode[_]): mode.Wrap[T, DataGetException] =
+        mode.wrap(ast2 match {
           case ast2: JsonAst =>
             val norm = value.$normalize
             try {
@@ -106,11 +106,11 @@ object Json extends JsonDataCompanion[Json, JsonAst] with Json_1 {
               else JsonDataType.jsonSerializer.serialize(Json.construct(MutableCell(norm),
                   Vector())(ast2)).asInstanceOf[T]
             } catch { case e: ClassCastException =>
-              throw TypeMismatchException(Some(ast.getType(norm) ->
-                  implicitly[JsonCastExtractor[T]].dataType))
+              mode.exception(TypeMismatchException(Some(ast.getType(norm) ->
+                  implicitly[JsonCastExtractor[T]].dataType)))
             }
           case _ => ???
-        }
+        })
     }
 
 }

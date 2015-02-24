@@ -23,9 +23,6 @@ trait JsonAst extends DataAst {
 
   def isScalar(any: Any) = isBoolean(any) || isNumber(any) || isString(any)
 
-  def getScalar(any: Any) = Try(getDouble(any)) orElse Try(getBoolean(any)) orElse
-      Try(getString(any)) getOrElse { throw new Exception }
-
   /** Extracts a `Boolean` from the parsed JSON. */
   def getBoolean(boolean: Any): Boolean
 

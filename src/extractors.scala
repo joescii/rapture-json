@@ -27,20 +27,20 @@ private[json] trait Extractors extends Extractors_1 {
 
   implicit def jsonExtractor(implicit ast: JsonAst): Extractor[Json, Json] =
     new Extractor[Json, Json] {
-      def construct(any: Json, dataAst: DataAst) =
-        Json.construct(MutableCell(JsonDataType.jsonSerializer.serialize(any)), Vector())
+      def extract(any: Json, dataAst: DataAst, mode: Mode[_]): mode.Wrap[Json, DataGetException] =
+        mode.wrap(Json.construct(MutableCell(JsonDataType.jsonSerializer.serialize(any)), Vector()))
     }
   
   implicit val stringExtractor: Extractor[String, Json] =
     new Extractor[String, Json] {
-      def construct(any: Json, ast: DataAst) =
-        any.$ast.getString(any.$root.value)
+      def extract(any: Json, ast: DataAst, mode: Mode[_]): mode.Wrap[String, DataGetException] =
+        mode.wrap(any.$ast.getString(any.$root.value))
     }
 
   implicit val doubleExtractor: Extractor[Double, Json] =
     new Extractor[Double, Json] {
-      def construct(any: Json, ast: DataAst) =
-        any.$ast.getDouble(any.$root.value)
+      def extract(any: Json, ast: DataAst, mode: Mode[_]): mode.Wrap[Double, DataGetException] =
+        mode.wrap(any.$ast.getDouble(any.$root.value))
     }
 
   implicit val intExtractor: Extractor[Int, Json] =
@@ -48,14 +48,14 @@ private[json] trait Extractors extends Extractors_1 {
 
   implicit val booleanExtractor: Extractor[Boolean, Json] =
     new Extractor[Boolean, Json] {
-      def construct(any: Json, ast: DataAst) =
-        any.$ast.getBoolean(any.$root.value)
+      def extract(any: Json, ast: DataAst, mode: Mode[_]): mode.Wrap[Boolean, DataGetException] =
+        mode.wrap(any.$ast.getBoolean(any.$root.value))
     }
   
   implicit val bigDecimalExtractor: Extractor[BigDecimal, Json] =
     new Extractor[BigDecimal, Json] {
-      def construct(any: Json, ast: DataAst) =
-        any.$ast.getBigDecimal(any.$root.value)
+      def extract(any: Json, ast: DataAst, mode: Mode[_]): mode.Wrap[BigDecimal, DataGetException] =
+        mode.wrap(any.$ast.getBigDecimal(any.$root.value))
     }
   
   implicit val bigIntExtractor: Extractor[BigInt, Json] =
@@ -66,16 +66,14 @@ private[json] trait Extractors_1 {
   implicit def jsonBufferExtractor[T](implicit jsonAst: JsonAst, ext: Extractor[T, Json]):
       Extractor[T, JsonBuffer] =
     new Extractor[T, JsonBuffer] {
-      def construct(any: JsonBuffer, ast: DataAst): T =
-        ext.construct(Json.construct(MutableCell(any.$root.value), Vector()), ast)
+      def extract(any: JsonBuffer, ast: DataAst, mode: Mode[_]): mode.Wrap[T, DataGetException] =
+        ext.extract(Json.construct(MutableCell(any.$root.value), Vector()), ast, mode)
     }
   
-  implicit def jsonBufferToJsonExtractor(implicit ast: JsonBufferAst):
-      Extractor[JsonBuffer, Json] =
+  implicit def jsonBufferToJsonExtractor(implicit ast: JsonBufferAst): Extractor[JsonBuffer, Json] =
     new Extractor[JsonBuffer, Json] {
-      def construct(any: Json, dataAst: DataAst) =
-        JsonBuffer.construct(MutableCell(JsonDataType.jsonSerializer.serialize(any)),
-            Vector())
+      def extract(any: Json, dataAst: DataAst, mode: Mode[_]): mode.Wrap[JsonBuffer, DataGetException] =
+        mode.wrap(JsonBuffer.construct(MutableCell(JsonDataType.jsonSerializer.serialize(any)), Vector()))
     }
 
 }
