@@ -100,7 +100,7 @@ object Json extends JsonDataCompanion[Json, JsonAst] with Json_1 {
       def extract(value: JsonDataType[_, _ <: JsonAst], ast2: DataAst, mode: Mode[_]): mode.Wrap[T, DataGetException] =
         mode.wrap(ast2 match {
           case ast2: JsonAst =>
-            val norm = value.$normalize
+            val norm = value.$normalize(modes.throwExceptions())
             try {
               if(ast == ast2) norm.asInstanceOf[T]
               else JsonDataType.jsonSerializer.serialize(Json.construct(MutableCell(norm),
