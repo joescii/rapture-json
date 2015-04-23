@@ -87,7 +87,7 @@ private[json] trait Serializers {
   implicit def jsonSerializer[JsonType <: JsonDataType[JsonType, _ <: JsonAst]]
       (implicit ast: JsonAst): Serializer[JsonType, Json] =
     BasicJsonSerializer[JsonType]({ j =>
-      if(j.$ast == ast) j.$normalize(modes.throwExceptions()) else {
+      if(j.$ast == ast) j.$normalize else {
         val oldAst = j.$ast
 
         def convert(v: Any): Any =
@@ -98,7 +98,7 @@ private[json] trait Serializers {
           else if(oldAst.isObject(v)) ast.fromObject(oldAst.getObject(v).mapValues(convert))
           else ast.nullValue
 
-        convert(j.$normalize(modes.throwExceptions())) // FIXME: Use custom mode
+        convert(j.$normalize) // FIXME: Use custom mode
       }
     })
 }

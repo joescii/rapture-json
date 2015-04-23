@@ -22,12 +22,11 @@ import language.experimental.macros
 import language.higherKinds
 
 private[json] object JsonMacros {
-  def jsonExtractorMacro[T: c.WeakTypeTag](c: Context): c.Expr[Extractor[T, Json]] =
-    Macros.extractorMacro2[T, Json](c)
+  def jsonExtractorMacro[T: c.WeakTypeTag, Th](c: Context): c.Expr[Extractor[T, Json] { type Throws = Th }] =
+    Macros.extractorMacro2[T, Json, Th](c)
   
-  def jsonBufferExtractorMacro[T: c.WeakTypeTag](c: Context):
-      c.Expr[Extractor[T, JsonBuffer]] =
-    Macros.extractorMacro2[T, JsonBuffer](c)
+  //def jsonBufferExtractorMacro[T: c.WeakTypeTag](c: Context) =
+  //  Macros.extractorMacro2[T, JsonBuffer](c)
   
   def jsonSerializerMacro[T: c.WeakTypeTag](c: Context)(ast: c.Expr[JsonAst]):
       c.Expr[Serializer[T, Json]] =

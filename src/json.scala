@@ -22,8 +22,8 @@ import language.higherKinds
 import language.experimental.macros
 
 private[json] trait Json_2 {
-  implicit def jsonExtractorMacro[T <: Product]: Extractor[T, Json] =
-    macro JsonMacros.jsonExtractorMacro[T]
+  implicit def jsonExtractorMacro[T <: Product, Th]: Extractor[T, Json] { type Throws = Th } =
+    macro JsonMacros.jsonExtractorMacro[T, Th]
 
   implicit def jsonSerializerMacro[T <: Product](implicit ast: JsonAst): Serializer[T, Json] =
     macro JsonMacros.jsonSerializerMacro[T]
@@ -37,8 +37,12 @@ private[json] class DynamicWorkaround(json: Json) {
   def self: Json = json.selectDynamic("self")
 }
 
+trait `Json.parse` extends MethodConstraint
+
 private[json] trait JsonDataCompanion[+Type <: JsonDataType[Type, AstType],
     AstType <: JsonAst] extends DataCompanion[Type, AstType] {
+
+  type ParseMethodConstraint = `Json.parse`
 
   /** Formats the JSON object for multi-line readability. */
   private[json] def doFormat(json: Any, ln: Int, ast: AstType, pad: String = " ",
@@ -97,16 +101,17 @@ object Json extends JsonDataCompanion[Json, JsonAst] with Json_1 {
   implicit def jsonCastExtractor[T: JsonCastExtractor](implicit ast: JsonAst):
       Extractor[T, JsonDataType[_, _ <: JsonAst]] =
     new Extractor[T, JsonDataType[_, _ <: JsonAst]] {
+      type Throws = DataGetException
       def extract(value: JsonDataType[_, _ <: JsonAst], ast2: DataAst, mode: Mode[_]): mode.Wrap[T, DataGetException] =
         mode.wrap(ast2 match {
           case ast2: JsonAst =>
-            val norm = value.$normalize(modes.throwExceptions())
+            val norm = mode.catching[DataGetException, Any](value.$normalize)
             try {
               if(ast == ast2) norm.asInstanceOf[T]
               else JsonDataType.jsonSerializer.serialize(Json.construct(MutableCell(norm),
                   Vector())(ast2)).asInstanceOf[T]
             } catch { case e: ClassCastException =>
-              mode.exception(TypeMismatchException(Some(ast.getType(norm) ->
+              mode.exception[T, DataGetException](TypeMismatchException(Some(ast.getType(norm) ->
                   implicitly[JsonCastExtractor[T]].dataType)))
             }
           case _ => ???
