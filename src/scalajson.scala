@@ -29,64 +29,64 @@ private[json] object ScalaJsonAst extends JsonBufferAst {
   
   def getArray(array: Any): List[Any] = array match {
     case list: List[a] => list
-    case _ => throw(TypeMismatchException(Some(getType(array) -> DataTypes.Array)))
+    case _ => throw(TypeMismatchException(getType(array), DataTypes.Array))
   }
 
   def fromArray(array: Seq[Any]): Any = array.to[List]
 
   def getBoolean(boolean: Any): Boolean = boolean match {
     case boolean: Boolean => boolean
-    case _ => throw(TypeMismatchException(Some(getType(boolean) -> DataTypes.Boolean)))
+    case _ => throw(TypeMismatchException(getType(boolean), DataTypes.Boolean))
   }
   
   def fromBoolean(boolean: Boolean): Any = boolean
   
   def getDouble(double: Any): Double = double match {
     case double: Double => double
-    case _ => throw(TypeMismatchException(Some(getType(double) -> DataTypes.Number)))
+    case _ => throw(TypeMismatchException(getType(double), DataTypes.Number))
   }
   
   def fromDouble(double: Double): Any = double
   
   def getBigDecimal(bigDecimal: Any): BigDecimal = bigDecimal match {
     case bigDecimal: Double => BigDecimal(bigDecimal)
-    case _ => throw(TypeMismatchException(Some(getType(bigDecimal) -> DataTypes.Number)))
+    case _ => throw(TypeMismatchException(getType(bigDecimal), DataTypes.Number))
   }
   
   def fromBigDecimal(bigDecimal: BigDecimal): Any = bigDecimal.toDouble
   
   def getString(string: Any): String = string match {
     case string: String => string
-    case _ => throw(TypeMismatchException(Some(getType(string) -> DataTypes.String)))
+    case _ => throw(TypeMismatchException(getType(string), DataTypes.String))
   }
   
   def fromString(string: String): Any = string
   
   def getObject(obj: Any): Map[String, Any] = obj match {
     case obj: Map[_, _] => obj collect { case (k: String, v) => k -> v }
-    case _ => throw(TypeMismatchException(Some(getType(obj) -> DataTypes.Object)))
+    case _ => throw(TypeMismatchException(getType(obj), DataTypes.Object))
   }
   
   def fromObject(obj: Map[String, Any]): Any = obj
   
   def setObjectValue(obj: Any, name: String, value: Any): Any = obj match {
     case obj: Map[_, _] => obj.asInstanceOf[Map[String, Any]] + (name -> value)
-    case _ => throw(TypeMismatchException(Some(getType(obj) -> DataTypes.Object)))
+    case _ => throw(TypeMismatchException(getType(obj), DataTypes.Object))
   }
   
   def removeObjectValue(obj: Any, name: String): Any = obj match {
     case obj: Map[_, _] => obj.asInstanceOf[Map[String, Any]] - name
-    case _ => throw(TypeMismatchException(Some(getType(obj) -> DataTypes.Object)))
+    case _ => throw(TypeMismatchException(getType(obj), DataTypes.Object))
   }
   
   def addArrayValue(array: Any, value: Any): Any = array match {
     case array: List[_] => array ::: List(value)
-    case _ => throw(TypeMismatchException(Some(getType(array) -> DataTypes.Array)))
+    case _ => throw(TypeMismatchException(getType(array), DataTypes.Array))
   }
   
   def setArrayValue(array: Any, index: Int, value: Any): Any = array match {
     case array: List[_] => array.padTo(index, null).patch(index, List(value), 1)
-    case _ => throw(TypeMismatchException(Some(getType(array) -> DataTypes.Array)))
+    case _ => throw(TypeMismatchException(getType(array), DataTypes.Array))
   }
   
   

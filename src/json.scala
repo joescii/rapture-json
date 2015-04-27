@@ -95,7 +95,7 @@ object Json extends JsonDataCompanion[Json, JsonAst] with Json_1 {
   def construct(any: MutableCell, path: Vector[Either[Int, String]])(implicit ast:
       JsonAst): Json = new Json(any, path)
 
-  def extractor[T](implicit ext: Extractor[T, Json]) = ext
+  def extractor[T](implicit ext: Extractor[T, Json]): Extractor[T, Json] { type Throws = ext.Throws } = ext
   def serializer[T](implicit ser: Serializer[T, Json]) = ser
 
   implicit def jsonCastExtractor[T: JsonCastExtractor](implicit ast: JsonAst):
@@ -111,8 +111,8 @@ object Json extends JsonDataCompanion[Json, JsonAst] with Json_1 {
               else JsonDataType.jsonSerializer.serialize(Json.construct(MutableCell(norm),
                   Vector())(ast2)).asInstanceOf[T]
             } catch { case e: ClassCastException =>
-              mode.exception[T, DataGetException](TypeMismatchException(Some(ast.getType(norm) ->
-                  implicitly[JsonCastExtractor[T]].dataType)))
+              mode.exception[T, DataGetException](TypeMismatchException(ast.getType(norm),
+                  implicitly[JsonCastExtractor[T]].dataType))
             }
           case _ => ???
         })

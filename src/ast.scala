@@ -66,7 +66,7 @@ trait JsonAst extends DataAst {
     else if(isObject(any)) DataTypes.Object
     else if(isArray(any)) DataTypes.Array
     else if(isNull(any)) DataTypes.Null
-    else throw MissingValueException(Vector())
+    else throw MissingValueException()
 
   protected def typeTest(pf: PartialFunction[Any, Unit])(v: Any) = pf.isDefinedAt(v)
 }
