@@ -18,13 +18,8 @@ in Scala. Rapture JSON is part of the [Rapture](http://rapture.io/) project.
 
 ## Availability
 
-<<<<<<< HEAD
-Rapture JSON 1.0.6 is available under the *Apache 2.0 License* from Maven Central
+Rapture JSON 1.1.0 is available under the *Apache 2.0 License* from Maven Central
 with group ID `com.propensive` and artifact ID `rapture-json_2.11`.
-=======
-Rapture JSON 1.0.8 is available under the *Apache 2.0 License* from Maven Central
-with group ID `com.propensive` and artifact ID `rapture-json_2.10`.
->>>>>>> master
 
 ### SBT
 
@@ -32,7 +27,7 @@ You can include Rapture JSON as a dependency in your own project by adding the
 following library dependency to your build file:
 
 ```scala
-libraryDependencies ++= Seq("com.propensive" %% "rapture-json-[backend]" % "1.0.8")
+libraryDependencies ++= Seq("com.propensive" %% "rapture-json-[backend]" % "1.1.0")
 ```
 
 where `[backend]` is one of the following JSON backends:
@@ -50,7 +45,7 @@ the following dependency, though this is not recommended due to the poor
 performance characteristics of this parser.
 
 ```scala
-libraryDependencies ++= Seq("com.propensive" %% "rapture-json" % "1.0.8")
+libraryDependencies ++= Seq("com.propensive" %% "rapture-json" % "1.1.0")
 ```
 
 ### Maven
@@ -60,13 +55,8 @@ If you use Maven, include the following dependency:
 ```xml
 <dependency>
   <groupId>com.propensive</groupId>
-<<<<<<< HEAD
   <artifactId>rapture-json-[backend]_2.11</artifactId>
-  <version>1.0.6<version>
-=======
-  <artifactId>rapture-json-[backend]_2.10</artifactId>
-  <version>1.0.8</version>
->>>>>>> master
+  <version>1.1.0</version>
 </dependency>
 ```
 
@@ -432,7 +422,7 @@ json.fruit.as[String] match {
   case Right(f) =>
     s"Found fruit $f"
   case Left(TypeMismatchException(found, _, _)) =>
-    s"Fruit was the wrong type: $found)
+    s"Fruit was the wrong type: $found"
   case Left(MissingValueException(path)) =>
     s"Fruit value was missing at path $path"
 }
@@ -513,9 +503,9 @@ more appropriate for some applications.
 The more general method is to use the `Json.format` method, with an appropriate
 implicit `Formatter` in scope. Two formatters are provided as standard:
 
- - `formatters.humanReadable`, which formats the JSON with newlines and
+ - `formatters.humanReadable._`, which formats the JSON with newlines and
    indentation, attempting to make it as readable as possible,
- - `formatters.compact`, which includes no unnecessary whitespace
+ - `formatters.compact._`, which includes no unnecessary whitespace
 
 Both formatters return `String`s, though it is possible for other backends to
 provide their own formatters for outputting to other types.

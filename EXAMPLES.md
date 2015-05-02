@@ -18,8 +18,8 @@ Code                                  | Description
 `import patternMatching.exactObjects` | Do not match objects with spurious additional keys
 `import patternMatching.exactArrays`  | Do not match arrays with spurious additional elements
 `import patternMatching.exact`        | Exact matching of both arrays and objects
-`import formatters.compact`           | Output JSON to `String`s without whitespace
-`import formatters.humanReadable`     | Output JSON to `String`s formatted with newlines and indentation
+`import formatters.compact._`         | Output JSON to `String`s without whitespace
+`import formatters.humanReadable._`   | Output JSON to `String`s formatted with newlines and indentation
 
 
 ## Parsing JSON
