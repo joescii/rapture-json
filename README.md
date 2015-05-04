@@ -251,7 +251,7 @@ json"""{
 }"""
 ```
 
-Much lake an interpolated string, Scala expressions may be substituted into a
+Much like an interpolated string, Scala expressions may be substituted into a
 `json` string context, provided the expressions evaluate to a type which is
 serializable to Json. Generally speaking, all types which can be extracted from
 a `Json` value (primitives, collections, case classes, Json) can also be serialized,
