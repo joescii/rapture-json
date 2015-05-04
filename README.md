@@ -81,6 +81,14 @@ Rapture JSON is now *stable*. This means that the API represents a useful set
 of features, and is unlikely to change significantly in subsequent releases.
 All API changes will be documented with instructions on how to upgrade.
 
+## Tests
+
+Rapture JSON has a reasonably comprehensive test suite in a [separate
+project](https://github.com/propensive/rapture-json-test). Unfortunately,
+running the tests is not entirely straightforward yet (we are working on this),
+but the source code shows some typical uses of Rapture JSON, so may be
+instructive in learning the library.
+
 ## Contributing
 
 Rapture JSON -- like all the Rapture projects -- openly welcomes contributions!
