@@ -21,6 +21,12 @@ object `package` {
 
   type Extractor[T, -D] = rapture.data.Extractor[T, D]
   type Serializer[T, -D] = rapture.data.Serializer[T, D]
+  type DataGetException = rapture.data.DataGetException
+  type TypeMismatchException = rapture.data.TypeMismatchException
+  type MissingValueException = rapture.data.MissingValueException
+
+  val TypeMismatchException = rapture.data.TypeMismatchException
+  val MissingValueException = rapture.data.MissingValueException
 
   implicit def jsonStringContext(sc: StringContext)(implicit parser: Parser[String, JsonAst]) =
     new JsonStrings(sc)
