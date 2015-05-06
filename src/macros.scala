@@ -23,7 +23,7 @@ import language.higherKinds
 
 private[json] object JsonMacros {
   def jsonExtractorMacro[T: c.WeakTypeTag, Th](c: whitebox.Context): c.Expr[Extractor[T, Json] { type Throws = Th }] =
-    Macros.extractorMacro2[T, Json, Th](c)
+    Macros.extractorMacro[T, Json, Th](c)
   
   //def jsonBufferExtractorMacro[T: c.WeakTypeTag](c: Context) =
   //  Macros.extractorMacro2[T, JsonBuffer](c)
