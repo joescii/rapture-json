@@ -2,24 +2,24 @@
 
 ## Imports
 
-Code                                  | Description
---------------------------------------|-----------------------------------------------------------------
-`import rapture.core._`               | Access core Rapture functionality, like Modes
-`import modes.returnTry`              | Have all fallible methods return results wrapped in `Try`
-`import modes.captureExceptions`      | Have all fallible methods return results wrapped in `Either`
-`import rapture.json._`               | Use the Rapture JSON library
-`import jsonBackends.scalaJson._`     | Use the Scala standard library JSON backend
-`import jsonBackends.argonaut._`      | Use the Argonaut backend
-`import jsonBackends.jackson._`       | Use the Jackson backend
-`import jsonBackends.jawn._`          | Use the Jawn backend
-`import jsonBackends.json4s._`        | Use the JSON4S backend
-`import jsonBackends.lift._`          | Use the Lift JSON backend
-`import jsonBackends.spray._`         | Use the Spray JSON backend
-`import patternMatching.exactObjects` | Do not match objects with spurious additional keys
-`import patternMatching.exactArrays`  | Do not match arrays with spurious additional elements
-`import patternMatching.exact`        | Exact matching of both arrays and objects
-`import formatters.compact._`         | Output JSON to `String`s without whitespace
-`import formatters.humanReadable._`   | Output JSON to `String`s formatted with newlines and indentation
+Code                                    | Description
+---------------------------------------|-----------------------------------------------------------------
+`import rapture.core._`                 | Access core Rapture functionality, like Modes
+`import modes.returnTry._`              | Have all fallible methods return results wrapped in `Try`
+`import modes.returnEither._`           | Have all fallible methods return results wrapped in `Either`
+`import rapture.json._`                 | Use the Rapture JSON library
+`import jsonBackends.scalaJson._`       | Use the Scala standard library JSON backend
+`import jsonBackends.argonaut._`        | Use the Argonaut backend
+`import jsonBackends.jackson._`         | Use the Jackson backend
+`import jsonBackends.jawn._`            | Use the Jawn backend
+`import jsonBackends.json4s._`          | Use the JSON4S backend
+`import jsonBackends.lift._`            | Use the Lift JSON backend
+`import jsonBackends.spray._`           | Use the Spray JSON backend
+`import patternMatching.exactObjects._` | Do not match objects with spurious additional keys
+`import patternMatching.exactArrays._`  | Do not match arrays with spurious additional elements
+`import patternMatching.exact._`        | Exact matching of both arrays and objects
+`import formatters.compact._`           | Output JSON to `String`s without whitespace
+`import formatters.humanReadable._`     | Output JSON to `String`s formatted with newlines and indentation
 
 
 ## Parsing JSON
