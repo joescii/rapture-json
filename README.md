@@ -411,7 +411,7 @@ type of all fallible methods such as `Json.parse` and `as`. For example,
 
 ```scala
 import rapture.core._
-import modes.returnTry
+import modes.returnTry._
 Json.parse(src)
 ```
 
@@ -425,7 +425,7 @@ and tracks the exception type in its signature, this allows exhaustivity
 checking to be performed on errors, for example:
 
 ```scala
-import modes.captureExceptions
+import modes.returnEither._
 json.fruit.as[String] match {
   case Right(f) =>
     s"Found fruit $f"
