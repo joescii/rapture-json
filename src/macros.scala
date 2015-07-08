@@ -12,6 +12,7 @@
 \******************************************************************************************************************/
 package rapture.json
 
+import rapture.base._
 import rapture.core._
 import rapture.data._
 
@@ -22,17 +23,17 @@ import language.experimental.macros
 import language.higherKinds
 
 private[json] object JsonMacros {
-  def jsonExtractorMacro[T: c.WeakTypeTag, Th](c: whitebox.Context): c.Expr[Extractor[T, Json] { type Throws = Th }] =
+  def jsonExtractorMacro[T: c.WeakTypeTag, Th](c: WhiteboxContext): c.Expr[Extractor[T, Json] { type Throws = Th }] =
     Macros.extractorMacro[T, Json, Th](c)
   
   //def jsonBufferExtractorMacro[T: c.WeakTypeTag](c: Context) =
   //  Macros.extractorMacro2[T, JsonBuffer](c)
   
-  def jsonSerializerMacro[T: c.WeakTypeTag](c: whitebox.Context)(ast: c.Expr[JsonAst]):
+  def jsonSerializerMacro[T: c.WeakTypeTag](c: WhiteboxContext)(ast: c.Expr[JsonAst]):
       c.Expr[Serializer[T, Json]] =
     Macros.serializerMacro[T, Json](c)(ast)
   
-  def jsonBufferSerializerMacro[T: c.WeakTypeTag](c: whitebox.Context)(ast: c.Expr[JsonBufferAst]):
+  def jsonBufferSerializerMacro[T: c.WeakTypeTag](c: WhiteboxContext)(ast: c.Expr[JsonBufferAst]):
       c.Expr[Serializer[T, JsonBuffer]] =
     Macros.serializerMacro[T, JsonBuffer](c)(ast)
 }

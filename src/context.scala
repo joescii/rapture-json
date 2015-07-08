@@ -12,6 +12,7 @@
 \******************************************************************************************************************/
 package rapture.json
 
+import rapture.base._
 import rapture.core._
 import rapture.data._
 
@@ -20,7 +21,7 @@ import scala.reflect.macros._
 
 private[json] object JsonDataMacros extends DataContextMacros[Json, JsonAst] {
   
-  def companion(c: blackbox.Context): c.Expr[DataCompanion[Json, JsonAst]] = c.universe.reify(Json)
+  def companion(c: BlackboxContext): c.Expr[DataCompanion[Json, JsonAst]] = c.universe.reify(Json)
 
   def parseSource(s: List[String]) = try {
     JsonValidator.validate(s)
@@ -33,7 +34,7 @@ private[json] object JsonDataMacros extends DataContextMacros[Json, JsonAst] {
       Some((strNo, pos, s"""Duplicate key found in Json literal: "$key""""))
   }
   
-  override def contextMacro(c: blackbox.Context)(exprs: c.Expr[ForcedConversion[Json]]*)
+  override def contextMacro(c: BlackboxContext)(exprs: c.Expr[ForcedConversion[Json]]*)
       (parser: c.Expr[Parser[String, JsonAst]]): c.Expr[Json] =
     super.contextMacro(c)(exprs: _*)(parser)
 
@@ -41,7 +42,7 @@ private[json] object JsonDataMacros extends DataContextMacros[Json, JsonAst] {
 
 private[json] object JsonBufferDataMacros extends DataContextMacros[JsonBuffer, JsonBufferAst] {
   
-  def companion(c: blackbox.Context): c.Expr[DataCompanion[JsonBuffer, JsonBufferAst]] =
+  def companion(c: BlackboxContext): c.Expr[DataCompanion[JsonBuffer, JsonBufferAst]] =
     c.universe.reify(JsonBuffer)
 
   def parseSource(s: List[String]) = try {
@@ -54,7 +55,7 @@ private[json] object JsonBufferDataMacros extends DataContextMacros[JsonBuffer, 
           s"Failed to parse JsonBuffer literal: Expected $expected, but found $f."))
   }
   
-  override def contextMacro(c: blackbox.Context)(exprs: c.Expr[ForcedConversion[JsonBuffer]]*)
+  override def contextMacro(c: BlackboxContext)(exprs: c.Expr[ForcedConversion[JsonBuffer]]*)
       (parser: c.Expr[Parser[String, JsonBufferAst]]): c.Expr[JsonBuffer] =
     super.contextMacro(c)(exprs: _*)(parser)
 }
