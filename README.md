@@ -36,7 +36,7 @@ where `[backend]` is one of the following JSON backends:
  - Jackson (`jackson`)
  - Jawn (`jawn`)
  - JSON4S (`json4s`)
- - Lift JSON (`lift` -- Scala 2.10 only)
+ - Lift JSON (`lift`)
  - Play JSON (`play`)
  - Spray (`spray`)
 
@@ -120,7 +120,7 @@ The following backends are available:
  - Jackson (`jackson`)
  - Jawn (`jawn`)
  - JSON4S (`json4s`)
- - Lift (`lift` -- Scala 2.10 only)
+ - Lift (`lift`)
  - Play (`play`)
  - Scala standard library JSON (`scalaJson`)
  - Spray (`spray`)
